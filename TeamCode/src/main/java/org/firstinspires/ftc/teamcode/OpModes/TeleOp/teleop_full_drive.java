@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.hardware.Slides;
 import org.firstinspires.ftc.teamcode.hardware.Claw;
+import static org.firstinspires.ftc.teamcode.hardware.Constants.maxSlides;
 
 // version 3 of taro's driver control code
 // basic drivetrain opmode w/ other components (& servo claw) and split gamepads
@@ -54,10 +56,10 @@ public class teleop_full_drive extends LinearOpMode
 
         // set direction of motors
         fldrive.setDirection(DcMotor.Direction.FORWARD);
-        frdrive.setDirection(DcMotor.Direction.FORWARD);
-        brdrive.setDirection(DcMotor.Direction.FORWARD);
+        frdrive.setDirection(DcMotor.Direction.REVERSE);
+        brdrive.setDirection(DcMotor.Direction.REVERSE);
         bldrive.setDirection(DcMotor.Direction.FORWARD);
-        turret.setDirection(DcMotor.Direction.FORWARD);
+        turret.setDirection(DcMotor.Direction.REVERSE);
 
         claw = new Claw(hardwareMap);
         claw.openClaw();
@@ -79,17 +81,17 @@ public class teleop_full_drive extends LinearOpMode
             double t = gamepad2.right_stick_x;
 
             // determine power for each motor
-            double fl = turn+speed+strafe;
+            double fl = turn+speed-strafe;
             double fr = turn-speed-strafe;
             double br = turn-speed+strafe;
-            double bl = turn+speed-strafe;
+            double bl = turn+speed+strafe;
 
             // slow mode
             if (slowmode){
-                fl /= 10;
-                fr /= 10;
-                bl /= 10;
-                br /= 10;
+                fl *= 0.7;
+                fr *= 0.7;
+                bl *= 0.7;
+                br *= 0.7;
             }
 
             // set power to motors with range of -1 to 1
@@ -97,12 +99,13 @@ public class teleop_full_drive extends LinearOpMode
             frdrive.setPower(Range.clip(fr, -1.0, 1.0));
             brdrive.setPower(Range.clip(br, -1.0, 1.0));
             bldrive.setPower(Range.clip(bl, -1.0, 1.0));
-            turret.setPower(Range.clip(t, -1.0, 1.0));
+            turret.setPower(Range.clip(t, -0.4, 0.4));
 
 
             if (gamepad2.left_bumper && slides.getHeight() > 0) slides.incrementDown();
-            if (gamepad2.right_bumper && slides.getHeight() < 3000) slides.incrementUp();
-            // if (gamepad2.b) slides.extendLow();
+            if (gamepad2.right_bumper && slides.getHeight() < maxSlides) slides.incrementUp();
+            if (gamepad2.b) slides.extendLow();
+            if (gamepad2.a) slides.retract();
 
             if (gamepad1.x && xControl) slowmode = !slowmode;
 
@@ -132,6 +135,8 @@ public class teleop_full_drive extends LinearOpMode
             telemetry.addData("frdrive", Double.toString(frdrive.getPower()));
             telemetry.addData("brdrive", Double.toString(brdrive.getPower()));
             telemetry.addData("bldrive", Double.toString(bldrive.getPower()));
+            telemetry.addData("turret", Double.toString(turret.getPower()));
+            telemetry.addData("servo", Double.toString(claw.getPosition()));
             telemetry.addData("slides", Double.toString(slides.getHeight()));
 
             telemetry.update();

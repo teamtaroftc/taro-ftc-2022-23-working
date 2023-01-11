@@ -4,9 +4,10 @@ public class Constants {
 
     // Linear Slides
 
+    public static int maxSlides = 2361;
     public static int high = 3000;
-    public static int mid = 2000;
-    public static int low = 1200;
+    public static int mid = 2500;
+    public static int low = 1640;
     public static int junction = 250;
     public static int base = 0;
 

@@ -17,7 +17,7 @@ public class Slides {
     DcMotorEx rightSlide;
 
     private static int increment = 50;
-    private static int velocity = 5000;
+    private static int velocity = 3000;
 
     public Slides (HardwareMap hardwareMap) {
         leftSlide = hardwareMap.get(DcMotorEx.class, "slideleft");
@@ -49,6 +49,8 @@ public class Slides {
         velocity -= decrease;
     }
 
+    public void setSpeed(int newVel) { velocity = newVel; }
+
     // broken method
     public void increment(double change) {
         if (leftSlide.getCurrentPosition() >= 0 && leftSlide.getCurrentPosition() < 2000) {
@@ -76,8 +78,8 @@ public class Slides {
     public void retract() {
         leftSlide.setTargetPosition(base);
         rightSlide.setTargetPosition(base);
-        leftSlide.setVelocity(velocity);
-        rightSlide.setVelocity(velocity);
+        leftSlide.setVelocity(3000);
+        rightSlide.setVelocity(3000);
     }
 
     public int getHeight() {
@@ -106,8 +108,8 @@ public class Slides {
     public void extendLow() {
         leftSlide.setTargetPosition(low);
         rightSlide.setTargetPosition(low);
-        leftSlide.setVelocity(velocity);
-        rightSlide.setVelocity(velocity);
+        leftSlide.setVelocity(3000);
+        rightSlide.setVelocity(3000);
     }
 
     public void extendJunction() {

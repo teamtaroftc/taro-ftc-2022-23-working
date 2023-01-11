@@ -22,4 +22,8 @@ public class Claw {
         claw.setPosition(CLOSE_POS);
     }
 
+    public double getPosition() {
+        return claw.getPosition();
+    }
+
 }

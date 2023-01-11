@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 // version 3 of taro's driver control code
 // basic drivetrain opmode w/ other components (& servo claw) and split gamepads
 
-// @Disabled
+@Disabled
 @TeleOp(name="teleop_claw", group="Linear Opmode")
 public class teleop_claw extends LinearOpMode
 {
